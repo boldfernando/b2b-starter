@@ -1,6 +1,7 @@
 import { getProductPrice } from "@/lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
 import { Text, clx } from "@medusajs/ui"
+import { getLocale, getTranslations } from "next-intl/server"
 import LocalizedClientLink from "@/modules/common/components/localized-client-link"
 import Thumbnail from "../thumbnail"
 import PreviewAddToCart from "./preview-add-to-cart"
@@ -15,12 +16,15 @@ export default async function ProductPreview({
   isFeatured?: boolean
   region: HttpTypes.StoreRegion
 }) {
+  const t = await getTranslations("Common")
+  const locale = await getLocale()
   if (!product) {
     return null
   }
 
   const { cheapestPrice } = getProductPrice({
     product,
+    locale,
   })
 
   const inventoryQuantity = product.variants?.reduce((acc, variant) => {
@@ -42,14 +46,14 @@ export default async function ProductPreview({
           />
         </div>
         <div className="flex flex-col txt-compact-medium">
-          <Text className="text-neutral-600 text-xs">BRAND</Text>
+          <Text className="text-neutral-600 text-xs">{t("brandLabel")}</Text>
           <Text className="text-ui-fg-base" data-testid="product-title">
             {product.title}
           </Text>
         </div>
         <div className="flex flex-col gap-0">
           {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
-          <Text className="text-neutral-600 text-[0.6rem]">Excl. VAT</Text>
+          <Text className="text-neutral-600 text-[0.6rem]">{t("exclVat")}</Text>
         </div>
         <div className="flex justify-between">
           <div className="flex flex-row gap-1 items-center">
@@ -66,7 +70,7 @@ export default async function ProductPreview({
               •
             </span>
             <Text className="text-neutral-600 text-xs">
-              {inventoryQuantity} left
+              {t("inventoryLeft", { count: inventoryQuantity ?? 0 })}
             </Text>
           </div>
           <PreviewAddToCart product={product} region={region} />

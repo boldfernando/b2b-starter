@@ -3,17 +3,37 @@ import { Toaster } from "@medusajs/ui"
 import { Analytics } from "@vercel/analytics/next"
 import { GeistSans } from "geist/font/sans"
 import { Metadata } from "next"
+import { NextIntlClientProvider } from "next-intl"
+import { getLocale, getMessages, getTranslations } from "next-intl/server"
 import "@/styles/globals.css"
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getBaseURL()),
+export const generateMetadata = async (): Promise<Metadata> => {
+  const t = await getTranslations("Metadata")
+
+  return {
+    metadataBase: new URL(getBaseURL()),
+    title: t("title"),
+    description: t("description"),
+  }
 }
 
-export default function RootLayout(props: { children: React.ReactNode }) {
+export default async function RootLayout(props: {
+  children: React.ReactNode
+}) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+
   return (
-    <html lang="en" data-mode="light" className={GeistSans.variable}>
+    <html
+      lang={locale}
+      data-mode="light"
+      className={GeistSans.variable}
+      suppressHydrationWarning
+    >
       <body>
-        <main className="relative">{props.children}</main>
+        <NextIntlClientProvider messages={messages}>
+          <main className="relative">{props.children}</main>
+        </NextIntlClientProvider>
         <Toaster className="z-[99999]" position="bottom-left" />
         <Analytics />
       </body>

@@ -1,0 +1,119 @@
+{
+  "Common": {
+    "brand": "Medusa B2B Starter",
+    "loading": "Loading…",
+    "search": "Search",
+    "searchDisabled": "Install a search provider to enable product search",
+    "close": "Close",
+    "back": "Back",
+    "continue": "Continue",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Remove",
+    "learnMore": "Learn more",
+    "cart": "Cart",
+    "viewCart": "View cart",
+    "viewAll": "View all",
+    "brandLabel": "BRAND",
+    "exclVat": "Excl. VAT",
+    "inventoryLeft": "{count, plural, one {# left} other {# left}}",
+    "fromPrice": "From {price}"
+  },
+  "Language": {
+    "label": "Language",
+    "english": "English",
+    "portuguese": "Português (Brasil)"
+  },
+  "Navigation": {
+    "home": "Home",
+    "store": "Store",
+    "products": "Products",
+    "account": "Account",
+    "cart": "Cart",
+    "categories": "Categories",
+    "collections": "Collections",
+    "orders": "Orders",
+    "quotes": "Quotes",
+    "approvals": "Approvals",
+    "company": "Company",
+    "signIn": "Sign in",
+    "signOut": "Sign out"
+  },
+  "Home": {
+    "banner": "The B2B Store Starter is ready for your company",
+    "bannerLink": "Explore the commerce experience",
+    "heroTitle": "Commerce built for modern B2B teams",
+    "heroSubtitle": "Manage company purchasing, approvals, quotes and orders in one fast storefront.",
+    "heroCta": "Browse products",
+    "featured": "Featured products"
+  },
+  "Footer": {
+    "categories": "Categories",
+    "collections": "Collections",
+    "products": "Products",
+    "contact": "Contact",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy",
+    "documentation": "Documentation",
+    "sourceCode": "Source code",
+    "copyright": "© {year} Medusa B2B Starter. All rights reserved."
+  },
+  "Product": {
+    "from": "From",
+    "quantity": "Quantity",
+    "addToCart": "Add to cart",
+    "selectOptions": "Select the available options",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "exclVat": "Excl. VAT",
+    "onlyLeft": "Only {quantity} left"
+  },
+  "Cart": {
+    "shoppingCart": "Shopping cart",
+    "empty": "Your cart is empty.",
+    "itemsInCart": "{count, plural, one {You have # item in your cart} other {You have # items in your cart}}",
+    "emptyDescription": "You don't have anything in your cart yet.",
+    "browseProducts": "Browse products",
+    "summary": "Summary",
+    "subtotal": "Subtotal",
+    "subtotalDescription": "Subtotal (excl. shipping and taxes)",
+    "shipping": "Shipping",
+    "taxes": "Taxes",
+    "discount": "Discount",
+    "giftCard": "Gift card",
+    "total": "Total",
+    "checkout": "Go to checkout",
+    "items": "{count, plural, =0 {No items} one {# item} other {# items}}"
+  },
+  "Checkout": {
+    "title": "Checkout",
+    "address": "Address",
+    "delivery": "Delivery",
+    "payment": "Payment",
+    "review": "Review",
+    "shippingAddress": "Shipping address",
+    "billingAddress": "Billing address",
+    "shippingMethod": "Shipping method",
+    "paymentMethod": "Payment method",
+    "placeOrder": "Place order",
+    "promoCode": "Promotion code",
+    "apply": "Apply"
+  },
+  "Account": {
+    "title": "My account",
+    "welcome": "Welcome back",
+    "loginHeadline": "Log in for faster checkout.",
+    "validEmail": "Enter a valid email address.",
+    "rememberMe": "Remember me",
+    "signIn": "Sign in",
+    "register": "Create account",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot your password?"
+  },
+  "Metadata": {
+    "title": "Medusa B2B Starter",
+    "description": "A modern B2B commerce storefront powered by Medusa."
+  }
+}

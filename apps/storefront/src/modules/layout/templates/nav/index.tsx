@@ -5,15 +5,19 @@ import CartButton from "@/modules/cart/components/cart-button"
 import LocalizedClientLink from "@/modules/common/components/localized-client-link"
 import FilePlus from "@/modules/common/icons/file-plus"
 import LogoIcon from "@/modules/common/icons/logo"
+import LanguageSwitcher from "@/modules/layout/components/language-switcher"
 import { MegaMenuWrapper } from "@/modules/layout/components/mega-menu"
 import { RequestQuoteConfirmation } from "@/modules/quotes/components/request-quote-confirmation"
 import { RequestQuotePrompt } from "@/modules/quotes/components/request-quote-prompt"
 import SkeletonAccountButton from "@/modules/skeletons/components/skeleton-account-button"
 import SkeletonCartButton from "@/modules/skeletons/components/skeleton-cart-button"
 import SkeletonMegaMenu from "@/modules/skeletons/components/skeleton-mega-menu"
+import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 
 export async function NavigationHeader() {
+  const tCommon = await getTranslations("Common")
+  const tNavigation = await getTranslations("Navigation")
   const customer = await retrieveCustomer().catch(() => null)
   const cart = await retrieveCart()
 
@@ -28,7 +32,7 @@ export async function NavigationHeader() {
             >
               <h1 className="small:text-base text-sm font-medium flex items-center">
                 <LogoIcon className="inline mr-2" />
-                Medusa B2B Starter
+                {tCommon("brand")}
               </h1>
             </LocalizedClientLink>
 
@@ -47,11 +51,15 @@ export async function NavigationHeader() {
               <input
                 disabled
                 type="text"
-                placeholder="Search for products"
+                placeholder={tCommon("search")}
                 className="bg-gray-100 text-zinc-900 px-4 py-2 rounded-full pr-10 shadow-borders-base hidden small:inline-block hover:cursor-not-allowed"
-                title="Install a search provider to enable product search"
+                title={tCommon("searchDisabled")}
               />
             </div>
+
+            <div className="h-4 w-px bg-neutral-300" />
+
+            <LanguageSwitcher />
 
             <div className="h-4 w-px bg-neutral-300" />
 
@@ -62,14 +70,18 @@ export async function NavigationHeader() {
                   // disabled={isPendingApproval}
                 >
                   <FilePlus />
-                  <span className="hidden small:inline-block">Quote</span>
+                  <span className="hidden small:inline-block">
+                    {tNavigation("quotes")}
+                  </span>
                 </button>
               </RequestQuoteConfirmation>
             ) : (
               <RequestQuotePrompt>
                 <button className="flex gap-1.5 items-center rounded-2xl bg-none shadow-none border-none hover:bg-neutral-100 px-2 py-1">
                   <FilePlus />
-                  <span className="hidden small:inline-block">Quote</span>
+                  <span className="hidden small:inline-block">
+                    {tNavigation("quotes")}
+                  </span>
                 </button>
               </RequestQuotePrompt>
             )}

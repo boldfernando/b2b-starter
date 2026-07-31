@@ -1,4 +1,4 @@
-import { convertToLocale } from "@/lib/util/money"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import LocalizedClientLink from "@/modules/common/components/localized-client-link"
 import CalendarIcon from "@/modules/common/icons/calendar"
 import DocumentIcon from "@/modules/common/icons/document"
@@ -12,6 +12,7 @@ type OrderCardProps = {
 }
 
 const OrderCard = ({ order }: OrderCardProps) => {
+  const convertToLocale = useMoneyFormatter()
   const createdAt = new Date(order.created_at)
   const numberOfLines = useMemo(() => {
     return (

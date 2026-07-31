@@ -1,7 +1,7 @@
 import { clx } from "@medusajs/ui"
 
 import { getPercentageDiff } from "@/lib/util/get-precentage-diff"
-import { convertToLocale } from "@/lib/util/money"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import { HttpTypes } from "@medusajs/types"
 
 type ItemTotalPriceProps = {
@@ -10,6 +10,7 @@ type ItemTotalPriceProps = {
 }
 
 const ItemTotalPrice = ({ item, currencyCode }: ItemTotalPriceProps) => {
+  const convertToLocale = useMoneyFormatter()
   const originalPrice = item.original_total || item.total || 0
   const currentPrice = item.total || 0
   const hasReducedPrice = currentPrice < originalPrice

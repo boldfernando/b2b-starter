@@ -1,9 +1,10 @@
+import { localeCookieName, resolveLocale } from "@/i18n/config"
 import { HttpTypes } from "@medusajs/types"
 import { NextRequest, NextResponse } from "next/server"
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
-const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "us"
+const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "br"
 
 const regionMapCache = {
   regionMap: new Map<string, HttpTypes.StoreRegion>(),
@@ -106,6 +107,41 @@ async function setCacheId(request: NextRequest, response: NextResponse) {
   return newCacheId
 }
 
+function setLocaleCookie(
+  request: NextRequest,
+  response: NextResponse,
+  countryCode?: string
+) {
+  const locale = resolveLocale({
+    cookieLocale: request.cookies.get(localeCookieName)?.value,
+    countryCode,
+    acceptLanguage: request.headers.get("accept-language"),
+  })
+
+  response.cookies.set(localeCookieName, locale, {
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  })
+}
+
+function nextWithLocale(request: NextRequest, countryCode?: string) {
+  const requestHeaders = new Headers(request.headers)
+
+  if (countryCode) {
+    requestHeaders.set("x-store-country-code", countryCode)
+  }
+
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
+
+  setLocaleCookie(request, response, countryCode)
+  return response
+}
+
 /**
  * Middleware to handle region selection and cache id.
  */
@@ -128,16 +164,16 @@ export async function middleware(request: NextRequest) {
   const countryCode = regionMap && (await getCountryCode(request, regionMap))
 
   const urlHasCountryCode =
-    countryCode && request.nextUrl.pathname.split("/")[1].includes(countryCode)
+    countryCode && request.nextUrl.pathname.split("/")[1] === countryCode
 
   // check if one of the country codes is in the url
   if (urlHasCountryCode && (!cartId || cartIdCookie) && cacheIdCookie) {
-    return NextResponse.next()
+    return nextWithLocale(request, countryCode)
   }
 
   // check if the url is a static asset
   if (request.nextUrl.pathname.includes(".")) {
-    return NextResponse.next()
+    return nextWithLocale(request, countryCode)
   }
 
   const redirectPath =
@@ -158,6 +194,7 @@ export async function middleware(request: NextRequest) {
     response.cookies.set("_medusa_cart_id", cartId, { maxAge: 60 * 60 * 24 })
   }
 
+  setLocaleCookie(request, response, countryCode)
   return response
 }
 

@@ -1,4 +1,4 @@
-import { convertToLocale } from "@/lib/util/money"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import { HttpTypes } from "@medusajs/types"
 import { clx, Text } from "@medusajs/ui"
 
@@ -15,6 +15,7 @@ const LineItemPrice = ({
   className,
   currencyCode,
 }: LineItemPriceProps) => {
+  const convertToLocale = useMoneyFormatter()
   const adjustmentsSum = (item.adjustments || []).reduce(
     (acc, adjustment) => adjustment.amount + acc,
     0

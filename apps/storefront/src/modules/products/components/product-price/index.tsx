@@ -1,14 +1,17 @@
 import { clx, Text } from "@medusajs/ui"
 import { getProductPrice } from "@/lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
+import { useLocale } from "next-intl"
 
 export default function ProductPrice({
   product,
 }: {
   product: HttpTypes.StoreProduct
 }) {
+  const locale = useLocale()
   const { cheapestPrice } = getProductPrice({
     product,
+    locale,
   })
 
   if (!cheapestPrice) {

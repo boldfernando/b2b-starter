@@ -2,7 +2,7 @@
 
 import { sdk } from "@/lib/config"
 import { HttpTypes } from "@medusajs/types"
-import { getCacheOptions } from "./cookies"
+import { getAuthHeaders, getCacheOptions } from "./cookies"
 
 export const listCategories = async (
   query?: Record<string, any>
@@ -10,7 +10,7 @@ export const listCategories = async (
   const next = {
     ...(await getCacheOptions("categories")),
   }
-
+  const headers = await getAuthHeaders()
   const limit = query?.limit || 100
 
   return sdk.client
@@ -23,6 +23,7 @@ export const listCategories = async (
           limit,
           ...query,
         },
+        headers,
         next,
       }
     )
@@ -33,10 +34,10 @@ export const getCategoryByHandle = async (
   categoryHandle: string[]
 ): Promise<HttpTypes.StoreProductCategory> => {
   const handle = `${categoryHandle.join("/")}`
-
   const next = {
     ...(await getCacheOptions("categories")),
   }
+  const headers = await getAuthHeaders()
 
   return sdk.client
     .fetch<HttpTypes.StoreProductCategoryListResponse>(
@@ -46,6 +47,7 @@ export const getCategoryByHandle = async (
           fields: "*category_children, *products",
           handle,
         },
+        headers,
         next,
       }
     )

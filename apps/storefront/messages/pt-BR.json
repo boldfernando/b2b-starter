@@ -1,0 +1,119 @@
+{
+  "Common": {
+    "brand": "Medusa B2B Starter",
+    "loading": "Carregando…",
+    "search": "Buscar",
+    "searchDisabled": "Instale um provedor de busca para habilitar a pesquisa de produtos",
+    "close": "Fechar",
+    "back": "Voltar",
+    "continue": "Continuar",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "remove": "Remover",
+    "learnMore": "Saiba mais",
+    "cart": "Carrinho",
+    "viewCart": "Ver carrinho",
+    "viewAll": "Ver todos",
+    "brandLabel": "MARCA",
+    "exclVat": "Impostos não inclusos",
+    "inventoryLeft": "{count, plural, =0 {Indisponível} one {# unidade disponível} other {# unidades disponíveis}}",
+    "fromPrice": "A partir de {price}"
+  },
+  "Language": {
+    "label": "Idioma",
+    "english": "English",
+    "portuguese": "Português (Brasil)"
+  },
+  "Navigation": {
+    "home": "Início",
+    "store": "Loja",
+    "products": "Produtos",
+    "account": "Minha conta",
+    "cart": "Carrinho",
+    "categories": "Categorias",
+    "collections": "Coleções",
+    "orders": "Pedidos",
+    "quotes": "Cotações",
+    "approvals": "Aprovações",
+    "company": "Empresa",
+    "signIn": "Entrar",
+    "signOut": "Sair"
+  },
+  "Home": {
+    "banner": "A loja B2B está pronta para a sua empresa",
+    "bannerLink": "Conheça a experiência de compra",
+    "heroTitle": "Comércio digital para equipes B2B modernas",
+    "heroSubtitle": "Gerencie compras corporativas, aprovações, cotações e pedidos em uma única loja rápida e intuitiva.",
+    "heroCta": "Ver produtos",
+    "featured": "Produtos em destaque"
+  },
+  "Footer": {
+    "categories": "Categorias",
+    "collections": "Coleções",
+    "products": "Produtos",
+    "contact": "Contato",
+    "terms": "Termos de uso",
+    "privacy": "Política de privacidade",
+    "documentation": "Documentação",
+    "sourceCode": "Código-fonte",
+    "copyright": "© {year} Medusa B2B Starter. Todos os direitos reservados."
+  },
+  "Product": {
+    "from": "A partir de",
+    "quantity": "Quantidade",
+    "addToCart": "Adicionar ao carrinho",
+    "selectOptions": "Selecione as opções disponíveis",
+    "inStock": "Em estoque",
+    "outOfStock": "Indisponível",
+    "exclVat": "Impostos não inclusos",
+    "onlyLeft": "Apenas {quantity} em estoque"
+  },
+  "Cart": {
+    "shoppingCart": "Carrinho de compras",
+    "empty": "Seu carrinho está vazio.",
+    "itemsInCart": "{count, plural, one {Você tem # item no carrinho} other {Você tem # itens no carrinho}}",
+    "emptyDescription": "Você ainda não adicionou nenhum produto ao carrinho.",
+    "browseProducts": "Ver produtos",
+    "summary": "Resumo",
+    "subtotal": "Subtotal",
+    "subtotalDescription": "Subtotal (frete e impostos não inclusos)",
+    "shipping": "Frete",
+    "taxes": "Impostos",
+    "discount": "Desconto",
+    "giftCard": "Vale-presente",
+    "total": "Total",
+    "checkout": "Finalizar compra",
+    "items": "{count, plural, =0 {Nenhum item} one {# item} other {# itens}}"
+  },
+  "Checkout": {
+    "title": "Finalizar compra",
+    "address": "Endereço",
+    "delivery": "Entrega",
+    "payment": "Pagamento",
+    "review": "Revisão",
+    "shippingAddress": "Endereço de entrega",
+    "billingAddress": "Endereço de cobrança",
+    "shippingMethod": "Forma de entrega",
+    "paymentMethod": "Forma de pagamento",
+    "placeOrder": "Fazer pedido",
+    "promoCode": "Cupom de desconto",
+    "apply": "Aplicar"
+  },
+  "Account": {
+    "title": "Minha conta",
+    "welcome": "Que bom ter você de volta",
+    "loginHeadline": "Entre para finalizar a compra mais rápido.",
+    "validEmail": "Digite um endereço de e-mail válido.",
+    "rememberMe": "Lembrar de mim",
+    "signIn": "Entrar",
+    "register": "Criar conta",
+    "email": "E-mail",
+    "password": "Senha",
+    "forgotPassword": "Esqueceu sua senha?"
+  },
+  "Metadata": {
+    "title": "Medusa B2B Starter",
+    "description": "Uma loja B2B moderna, criada com Medusa e localizada para o Brasil."
+  }
+}

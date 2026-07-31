@@ -1,5 +1,5 @@
 import QuoteStatusBadge from "@/app/[countryCode]/(main)/account/@dashboard/quotes/components/quote-status-badge"
-import { convertToLocale } from "@/lib/util/money"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import LocalizedClientLink from "@/modules/common/components/localized-client-link"
 import { StoreQuoteResponse } from "@/types"
 import { CalendarMini, DocumentText } from "@medusajs/icons"
@@ -12,6 +12,7 @@ type QuoteCardProps = {
 }
 
 const QuoteCard = ({ quote }: QuoteCardProps) => {
+  const convertToLocale = useMoneyFormatter()
   const { draft_order: order } = quote
   const createdAt = new Date(order.created_at)
 

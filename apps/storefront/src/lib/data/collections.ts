@@ -2,17 +2,19 @@
 
 import { sdk } from "@/lib/config"
 import { HttpTypes } from "@medusajs/types"
-import { getCacheOptions } from "./cookies"
+import { getAuthHeaders, getCacheOptions } from "./cookies"
 
 export const retrieveCollection = async (id: string) => {
   const next = {
     ...(await getCacheOptions("collections")),
   }
+  const headers = await getAuthHeaders()
 
   return sdk.client
     .fetch<{ collection: HttpTypes.StoreCollection }>(
       `/store/collections/${id}`,
       {
+        headers,
         next,
       }
     )
@@ -25,6 +27,7 @@ export const listCollections = async (
   const next = {
     ...(await getCacheOptions("collections")),
   }
+  const headers = await getAuthHeaders()
 
   queryParams.limit = queryParams.limit || "100"
   queryParams.offset = queryParams.offset || "0"
@@ -33,6 +36,7 @@ export const listCollections = async (
     .fetch<{ collections: HttpTypes.StoreCollection[]; count: number }>(
       "/store/collections",
       {
+        headers,
         query: queryParams,
         next,
       }
@@ -46,9 +50,11 @@ export const getCollectionByHandle = async (
   const next = {
     ...(await getCacheOptions("collections")),
   }
+  const headers = await getAuthHeaders()
 
   return sdk.client
     .fetch<HttpTypes.StoreCollectionListResponse>(`/store/collections`, {
+      headers,
       query: { handle },
       next,
     })

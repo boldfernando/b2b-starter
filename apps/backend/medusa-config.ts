@@ -1,11 +1,14 @@
 import { QUOTE_MODULE } from "./src/modules/quote";
 import { APPROVAL_MODULE } from "./src/modules/approval";
 import { COMPANY_MODULE } from "./src/modules/company";
-import { loadEnv, defineConfig } from "@medusajs/framework/utils";
+import { loadEnv, defineConfig, Modules } from "@medusajs/framework/utils";
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd());
 
 module.exports = defineConfig({
+  featureFlags: {
+    translation: true,
+  },
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
     http: {
@@ -17,6 +20,9 @@ module.exports = defineConfig({
     },
   },
   modules: {
+    [Modules.TRANSLATION]: {
+      resolve: "@medusajs/medusa/translation",
+    },
     [COMPANY_MODULE]: {
       resolve: "./modules/company",
     },

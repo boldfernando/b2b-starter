@@ -1,6 +1,6 @@
 "use client"
 
-import { convertToLocale } from "@/lib/util/money"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import Divider from "@/modules/common/components/divider"
 import { B2BCart, B2BOrder } from "@/types"
 import { Text } from "@medusajs/ui"
@@ -9,6 +9,7 @@ import React from "react"
 const CheckoutTotals: React.FC<{
   cartOrOrder: B2BCart | B2BOrder
 }> = ({ cartOrOrder }) => {
+  const convertToLocale = useMoneyFormatter()
   if (!cartOrOrder) return null
 
   const {

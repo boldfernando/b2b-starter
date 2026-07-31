@@ -1,12 +1,13 @@
 "use client"
 
-import { convertToLocale } from "@/lib/util/money"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import { Text } from "@medusajs/ui"
 import React from "react"
 import Divider from "../divider"
 import { useCart } from "@/lib/context/cart-context"
 
 const CartTotals: React.FC = () => {
+  const convertToLocale = useMoneyFormatter()
   const { isUpdatingCart, cart } = useCart()
 
   if (!cart) return null

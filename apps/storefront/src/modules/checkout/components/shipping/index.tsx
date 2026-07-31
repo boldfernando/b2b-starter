@@ -1,7 +1,7 @@
 "use client"
 
 import { setShippingMethod } from "@/lib/data/cart"
-import { convertToLocale } from "@/lib/util/money"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import ErrorMessage from "@/modules/checkout/components/error-message"
 import Button from "@/modules/common/components/button"
 import Divider from "@/modules/common/components/divider"
@@ -23,6 +23,7 @@ const Shipping: React.FC<ShippingProps> = ({
   cart,
   availableShippingMethods,
 }) => {
+  const convertToLocale = useMoneyFormatter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 

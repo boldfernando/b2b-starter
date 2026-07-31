@@ -1,8 +1,8 @@
 import { Container, Heading, Text } from "@medusajs/ui"
 
 import { isStripeLike, paymentInfoMap } from "@/lib/constants"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import Divider from "@/modules/common/components/divider"
-import { convertToLocale } from "@/lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 
 type PaymentDetailsProps = {
@@ -10,6 +10,7 @@ type PaymentDetailsProps = {
 }
 
 const PaymentDetails = ({ order }: PaymentDetailsProps) => {
+  const convertToLocale = useMoneyFormatter()
   const payment = order.payment_collections?.[0].payments?.[0]
 
   return (

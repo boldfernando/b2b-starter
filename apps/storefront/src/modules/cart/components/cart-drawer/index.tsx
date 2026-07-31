@@ -1,9 +1,9 @@
 "use client"
 
 import { useCart } from "@/lib/context/cart-context"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import { checkSpendingLimit } from "@/lib/util/check-spending-limit"
 import { getCheckoutStep } from "@/lib/util/get-checkout-step"
-import { convertToLocale } from "@/lib/util/money"
 import AppliedPromotions from "@/modules/cart/components/applied-promotions"
 import ApprovalStatusBanner from "@/modules/cart/components/approval-status-banner"
 import ItemsTemplate from "@/modules/cart/templates/items"
@@ -17,6 +17,7 @@ import { ExclamationCircle, LockClosedSolidMini } from "@medusajs/icons"
 import { StoreCart } from "@medusajs/types"
 import { Drawer, Text } from "@medusajs/ui"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 type CartDrawerProps = {
@@ -29,6 +30,9 @@ const CartDrawer = ({
   freeShippingPrices,
   ...props
 }: CartDrawerProps) => {
+  const convertToLocale = useMoneyFormatter()
+  const common = useTranslations("Common")
+  const cartMessages = useTranslations("Cart")
   const [activeTimer, setActiveTimer] = useState<NodeJS.Timer | undefined>(
     undefined
   )
@@ -132,7 +136,7 @@ const CartDrawer = ({
                     amount: subtotal,
                     currency_code: cart.currency_code,
                   })
-                : "Cart"}
+                : common("cart")}
             </span>
             <div className="bg-blue-500 text-white text-xs px-1.5 py-px rounded-full">
               {totalItems}
@@ -146,8 +150,8 @@ const CartDrawer = ({
           <Drawer.Header className="flex self-center">
             <Drawer.Title>
               {totalItems > 0
-                ? `You have ${totalItems} items in your cart`
-                : "Your cart is empty"}
+                ? cartMessages("itemsInCart", { count: totalItems })
+                : cartMessages("empty")}
             </Drawer.Title>
           </Drawer.Header>
           {cart?.approvals && cart.approvals.length > 0 && (
@@ -177,7 +181,7 @@ const CartDrawer = ({
                     />
                   )}
                   <div className="flex justify-between">
-                    <Text>Subtotal</Text>
+                    <Text>{cartMessages("subtotal")}</Text>
                     <Text>
                       {convertToLocale({
                         amount: subtotal,
@@ -192,7 +196,7 @@ const CartDrawer = ({
                         className="w-full"
                         size="large"
                       >
-                        View Cart
+                        {common("viewCart")}
                       </Button>
                     </LocalizedClientLink>
                     <LocalizedClientLink href={checkoutPath}>

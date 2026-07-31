@@ -1,5 +1,5 @@
 import { getCartApprovalStatus } from "@/lib/util/get-cart-approval-status"
-import { convertToLocale } from "@/lib/util/money"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import ItemFull from "@/modules/cart/components/item-full"
 import { B2BCart } from "@/types/global"
 import { StoreCartLineItem } from "@medusajs/types"
@@ -17,6 +17,7 @@ const ItemsTemplate = ({
   showBorders = true,
   showTotal = true,
 }: ItemsTemplateProps) => {
+  const convertToLocale = useMoneyFormatter()
   const items = cart?.items
   const totalQuantity = useMemo(
     () => cart?.items?.reduce((acc, item) => acc + item.quantity, 0),

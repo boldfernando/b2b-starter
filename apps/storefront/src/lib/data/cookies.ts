@@ -1,21 +1,32 @@
 "use server"
 
+import { localeCookieName, resolveLocale } from "@/i18n/config"
 import "server-only"
 
 import { cookies as nextCookies } from "next/headers"
 
-export const getAuthHeaders = async (): Promise<
-  { authorization: string } | {}
-> => {
+export const getRequestLocale = async () => {
+  const cookies = await nextCookies()
+
+  return resolveLocale({
+    cookieLocale: cookies.get(localeCookieName)?.value,
+  })
+}
+
+export const getAuthHeaders = async (): Promise<Record<string, string>> => {
   try {
     const cookies = await nextCookies()
     const token = cookies.get("_medusa_jwt")?.value
+    const locale = resolveLocale({
+      cookieLocale: cookies.get(localeCookieName)?.value,
+    })
+    const headers = { "x-medusa-locale": locale }
 
     if (token) {
-      return { authorization: `Bearer ${token}` }
+      return { ...headers, authorization: `Bearer ${token}` }
     }
 
-    return {}
+    return headers
   } catch (error) {
     return {}
   }
@@ -30,7 +41,11 @@ export const getCacheTag = async (tag: string): Promise<string> => {
       return ""
     }
 
-    return `${tag}-${cacheId}`
+    const locale = resolveLocale({
+      cookieLocale: cookies.get(localeCookieName)?.value,
+    })
+
+    return `${tag}-${locale}-${cacheId}`
   } catch (error) {
     return ""
   }

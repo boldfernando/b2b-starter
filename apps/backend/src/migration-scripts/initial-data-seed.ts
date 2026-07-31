@@ -20,6 +20,7 @@ import {
   createTaxRegionsWorkflow,
   linkSalesChannelsToApiKeyWorkflow,
   linkSalesChannelsToStockLocationWorkflow,
+  upsertVariantPricesWorkflow,
 } from "@medusajs/medusa/core-flows";
 
 export default async function initial_data_seed({
@@ -86,6 +87,10 @@ export default async function initial_data_seed({
               currency_code: "usd",
               is_default: false,
             },
+            {
+              currency_code: "brl",
+              is_default: false,
+            },
           ],
           default_sales_channel_id: defaultSalesChannel.id,
         },
@@ -103,15 +108,22 @@ export default async function initial_data_seed({
           countries,
           payment_providers: ["pp_system_default"],
         },
+        {
+          name: "Brasil",
+          currency_code: "brl",
+          countries: ["br"],
+          payment_providers: ["pp_system_default"],
+        },
       ],
     },
   });
   const region = regionResult[0];
+  const brazilRegion = regionResult[1];
   logger.info("Finished seeding regions.");
 
   logger.info("Seeding tax regions...");
   await createTaxRegionsWorkflow(container).run({
-    input: countries.map((country_code) => ({
+    input: [...countries, "br"].map((country_code) => ({
       country_code,
       provider_id: "tp_system",
     })),
@@ -195,6 +207,10 @@ export default async function initial_data_seed({
             country_code: "it",
             type: "country",
           },
+          {
+            country_code: "br",
+            type: "country",
+          },
         ],
       },
     ],
@@ -232,8 +248,16 @@ export default async function initial_data_seed({
             amount: 10,
           },
           {
+            currency_code: "brl",
+            amount: 35,
+          },
+          {
             region_id: region.id,
             amount: 10,
+          },
+          {
+            region_id: brazilRegion.id,
+            amount: 35,
           },
         ],
         rules: [
@@ -270,8 +294,16 @@ export default async function initial_data_seed({
             amount: 10,
           },
           {
+            currency_code: "brl",
+            amount: 35,
+          },
+          {
             region_id: region.id,
             amount: 10,
+          },
+          {
+            region_id: brazilRegion.id,
+            amount: 35,
           },
         ],
         rules: [
@@ -1017,6 +1049,130 @@ export default async function initial_data_seed({
       ],
     },
   });
+
+  const query = container.resolve(ContainerRegistrationKeys.QUERY);
+  const { data: variants } = await query.graph({
+    entity: "product_variant",
+    fields: ["id", "product_id", "prices.amount", "prices.currency_code"],
+  });
+  const variantPrices = variants.flatMap((variant: any) => {
+    const sourcePrice = variant.prices?.find(
+      (price: any) => price.currency_code === "usd"
+    );
+
+    return sourcePrice
+      ? [
+          {
+            variant_id: variant.id,
+            product_id: variant.product_id,
+            prices: [
+              {
+                amount: sourcePrice.amount,
+                currency_code: "brl",
+              },
+            ],
+          },
+        ]
+      : [];
+  });
+
+  await upsertVariantPricesWorkflow(container).run({
+    input: {
+      variantPrices,
+      previousVariantIds: variants.map((variant: any) => variant.id),
+    },
+  });
+
+  logger.info("Seeding Brazilian Portuguese catalog translations...");
+  const translationModuleService = container.resolve(Modules.TRANSLATION);
+
+  const productTranslations: Record<
+    string,
+    { title: string; description: string }
+  > = {
+    "16-ultra-slim-ai-laptop-3k-oled-11cm-thin-6-speaker-audio": {
+      title: 'Notebook ultrafino de 16" com IA, tela OLED 3K e seis alto-falantes',
+      description:
+        "Notebook sofisticado e de alto desempenho, com chassi ultrafino de 1,1 cm, processador otimizado para IA, tela OLED 3K de 16 polegadas e sistema de áudio imersivo com seis alto-falantes.",
+    },
+    "1080p-hd-pro-webcam-superior-video-privacy-enabled": {
+      title: "Webcam profissional Full HD 1080p com proteção de privacidade",
+      description:
+        "Webcam Full HD de alta qualidade para videoconferências, com imagem e áudio superiores aos de câmeras integradas e proteção de privacidade.",
+    },
+    "65-ultra-hd-smartphone-3x-impact-resistant-screen": {
+      title: 'Smartphone de 6,5" Ultra HD com tela resistente a impactos',
+      description:
+        "Smartphone premium em alumínio de grau aeroespacial, com tela AMOLED Ultra HD de 6,5 polegadas e vidro de nanocristais com resistência elevada a impactos.",
+    },
+    "34-qd-oled-curved-gaming-monitor-ultra-wide-infinite-contrast-175hz": {
+      title: 'Monitor gamer curvo QD-OLED de 34" ultrawide e 175 Hz',
+      description:
+        "Monitor curvo QD-OLED de 34 polegadas com contraste excepcional, pretos profundos, cores vivas, amplo ângulo de visão e taxa de atualização de 175 Hz.",
+    },
+    "hi-fi-gaming-headset-pro-grade-dac-hi-res-certified": {
+      title: "Headset gamer Hi‑Fi com DAC profissional e certificação Hi‑Res",
+      description:
+        "Sistema acústico avançado com DAC integrado, amplificador e áudio de alta resolução para jogos, produção musical e entretenimento.",
+    },
+    "wireless-keyboard-touch-id-numeric-keypad": {
+      title: "Teclado sem fio com Touch ID e teclado numérico",
+      description:
+        "Teclado sem fio recarregável com Touch ID, teclado numérico, teclas de navegação e bateria com autonomia aproximada de um mês.",
+    },
+    "wireless-rechargeable-mouse-multi-touch-surface": {
+      title: "Mouse sem fio recarregável com superfície Multi‑Touch",
+      description:
+        "Mouse sem fio recarregável com superfície Multi‑Touch para gestos intuitivos, design confortável e emparelhamento simples.",
+    },
+    "conference-speaker-high-performance-budget-friendly": {
+      title: "Caixa de som para conferências de alto desempenho",
+      description:
+        "Caixa de som compacta para conferências, com comunicação clara, recursos de produtividade e excelente relação custo-benefício.",
+    },
+  };
+  const { data: products } = await query.graph({
+    entity: "product",
+    fields: ["id", "handle"],
+  });
+  const productTranslationRecords = products.flatMap((product: any) => {
+    const translations = productTranslations[product.handle];
+
+    return translations
+      ? [
+          {
+            reference: "product",
+            reference_id: product.id,
+            locale_code: "pt-BR",
+            translations,
+          },
+        ]
+      : [];
+  });
+  const categoryTranslations: Record<string, string> = {
+    Laptops: "Notebooks",
+    Accessories: "Acessórios",
+    Phones: "Smartphones",
+    Monitors: "Monitores",
+  };
+
+  await translationModuleService.createTranslations([
+    ...productTranslationRecords,
+    ...categoryResult.map((category) => ({
+      reference: "product_category",
+      reference_id: category.id,
+      locale_code: "pt-BR",
+      translations: {
+        name: categoryTranslations[category.name] ?? category.name,
+      },
+    })),
+    {
+      reference: "product_collection",
+      reference_id: collection.id,
+      locale_code: "pt-BR",
+      translations: { title: "Destaques" },
+    },
+  ]);
 
   logger.info("Finished seeding product data.");
 }

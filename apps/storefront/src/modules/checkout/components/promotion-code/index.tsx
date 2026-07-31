@@ -1,8 +1,8 @@
 "use client"
 
 import { applyPromotions, submitPromotionForm } from "@/lib/data/cart"
+import { useMoneyFormatter } from "@/lib/hooks/use-money-formatter"
 import { getCartApprovalStatus } from "@/lib/util/get-cart-approval-status"
-import { convertToLocale } from "@/lib/util/money"
 import Trash from "@/modules/common/icons/trash"
 import { B2BCart } from "@/types"
 import { ChevronDownMini, ChevronUpMini } from "@medusajs/icons"
@@ -17,6 +17,7 @@ type PromotionCodeProps = {
 }
 
 const PromotionCode: React.FC<PromotionCodeProps> = ({ cart }) => {
+  const convertToLocale = useMoneyFormatter()
   const [isOpen, setIsOpen] = React.useState(false)
   const pathname = usePathname()
 

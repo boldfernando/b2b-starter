@@ -8,6 +8,7 @@ import { B2BCart } from "@/types/global"
 import { CheckMini, XMarkMini } from "@medusajs/icons"
 import { clx, Container, Text } from "@medusajs/ui"
 import Image from "next/image"
+import { getLocale } from "next-intl/server"
 
 type ApprovalCardProps = {
   cartWithApprovals: B2BCart
@@ -18,6 +19,7 @@ export default async function ApprovalCard({
   cartWithApprovals,
   type = "customer",
 }: ApprovalCardProps) {
+  const locale = await getLocale()
   const cart = await retrieveCart(cartWithApprovals.id)
 
   if (!cart) {
@@ -133,6 +135,7 @@ export default async function ApprovalCard({
             {convertToLocale({
               amount: cart.total,
               currency_code: cart.currency_code,
+              locale,
             })}
           </span>
           {"·"}
