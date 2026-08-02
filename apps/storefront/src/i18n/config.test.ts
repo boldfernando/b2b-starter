@@ -31,6 +31,12 @@ describe("locale configuration", () => {
     expect(resolveLocale({ countryCode: "br" })).toBe("pt-BR")
   })
 
+  it("keeps browser language independent from the Brazilian market", () => {
+    expect(
+      resolveLocale({ countryCode: "br", acceptLanguage: "en-US,en;q=0.9" })
+    ).toBe("en-US")
+  })
+
   it("negotiates generic Portuguese and English browser preferences", () => {
     expect(resolveLocale({ acceptLanguage: "pt-PT,pt;q=0.9,en;q=0.8" })).toBe(
       "pt-BR"

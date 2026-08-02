@@ -88,6 +88,6 @@ export const resolveLocale = ({
   acceptLanguage,
 }: ResolveLocaleOptions): AppLocale =>
   (cookieLocale && normalizeSupportedLocale(cookieLocale)) ||
-  localeForCountry(countryCode) ||
   localeFromAcceptLanguage(acceptLanguage) ||
+  localeForCountry(countryCode) ||
   defaultLocale

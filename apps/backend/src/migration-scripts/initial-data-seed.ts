@@ -22,6 +22,7 @@ import {
   linkSalesChannelsToStockLocationWorkflow,
   upsertVariantPricesWorkflow,
 } from "@medusajs/medusa/core-flows";
+import { buildBrlVariantPrices } from "./brl-variant-prices";
 
 export default async function initial_data_seed({
   container,
@@ -1053,35 +1054,25 @@ export default async function initial_data_seed({
   const query = container.resolve(ContainerRegistrationKeys.QUERY);
   const { data: variants } = await query.graph({
     entity: "product_variant",
-    fields: ["id", "product_id", "prices.amount", "prices.currency_code"],
+    fields: [
+      "id",
+      "product_id",
+      "sku",
+      "prices.id",
+      "prices.amount",
+      "prices.currency_code",
+    ],
   });
-  const variantPrices = variants.flatMap((variant: any) => {
-    const sourcePrice = variant.prices?.find(
-      (price: any) => price.currency_code === "usd"
-    );
+  const variantPrices = buildBrlVariantPrices(variants);
 
-    return sourcePrice
-      ? [
-          {
-            variant_id: variant.id,
-            product_id: variant.product_id,
-            prices: [
-              {
-                amount: sourcePrice.amount,
-                currency_code: "brl",
-              },
-            ],
-          },
-        ]
-      : [];
-  });
-
-  await upsertVariantPricesWorkflow(container).run({
-    input: {
-      variantPrices,
-      previousVariantIds: variants.map((variant: any) => variant.id),
-    },
-  });
+  if (variantPrices.length) {
+    await upsertVariantPricesWorkflow(container).run({
+      input: {
+        variantPrices,
+        previousVariantIds: variantPrices.map((variant) => variant.variant_id),
+      },
+    });
+  }
 
   logger.info("Seeding Brazilian Portuguese catalog translations...");
   const translationModuleService = container.resolve(Modules.TRANSLATION);
